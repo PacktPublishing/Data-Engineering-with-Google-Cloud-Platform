@@ -15,8 +15,7 @@ def create_fact_table(project_id, target_table_id):
     destination=target_table_id,
     write_disposition='WRITE_APPEND')
 
-    table = bigquery.Table(target_table_id)
-    sql = f"""SELECT DATE(start_date) as trip_date,
+    sql = """SELECT DATE(start_date) as trip_date,
                 region_id,
                 member_gender,
                 COUNT(trip_id) as total_trips
