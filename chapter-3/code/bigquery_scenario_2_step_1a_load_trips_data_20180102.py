@@ -4,10 +4,7 @@ client = bigquery.Client()
 
 # TODO : Change to your project id
 project_id = "packt-data-eng-on-gcp"
-gcs_uri = "gs://{}-data-bucket/from-git/chapter-3/dataset/trips/20180101/*.json".format(project_id)
-
-# This uri for load data from 2018-01-02
-#gcs_uri = "gs://{}-data-bucket/from-git/chapter-3/dataset/trips/20180102/*.json".format(project_id)
+gcs_uri = "gs://{}-data-bucket/from-git/chapter-3/dataset/trips/20180102/*.json".format(project_id)
 
 table_id = "{}.raw_bikesharing.trips".format(project_id)
 

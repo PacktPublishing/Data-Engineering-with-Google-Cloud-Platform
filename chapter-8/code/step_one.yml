@@ -1,0 +1,35 @@
+name: Step one
+inputs:
+- {name: text, type: String}
+outputs:
+- {name: Output, type: String}
+implementation:
+  container:
+    image: python:3.7
+    command:
+    - sh
+    - -c
+    - (python3 -m ensurepip || python3 -m ensurepip --user) && (PIP_DISABLE_PIP_VERSION_CHECK=1
+      python3 -m pip install --quiet                 --no-warn-script-location 'kfp==1.8.0'
+      || PIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet                 --no-warn-script-location
+      'kfp==1.8.0' --user) && "$0" "$@"
+    - sh
+    - -ec
+    - |
+      program_path=$(mktemp -d)
+      printf "%s" "$0" > "$program_path/ephemeral_component.py"
+      python3 -m kfp.v2.components.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+    - |2+
+
+      from kfp.v2.dsl import *
+      from typing import *
+
+      def step_one(text: str) -> str:
+          print(text)
+          return text
+
+    args:
+    - --executor_input
+    - {executorInput: null}
+    - --function_to_execute
+    - step_one

@@ -7,13 +7,18 @@ target_table_id = "{}.raw_bikesharing.regions".format(project_id)
 
 def load_data_from_bigquery_public(public_table_id, target_table_id):
     client = bigquery.Client()
-    job_config = bigquery.QueryJobConfig(destination=target_table_id)
+    job_config = bigquery.QueryJobConfig(
+    destination = target_table_id,
+    write_disposition ='WRITE_TRUNCATE')
 
-    table = bigquery.Table(target_table_id)
-    sql = f"""SELECT * FROM `{public_table_id}`;"""
+    sql = "SELECT * FROM `{}`;".format(public_table_id)
 
-    # Start the query, passing in the extra configuration.
-    query_job = client.query(sql, job_config=job_config)  # Make an API request.
-    query_job.result()  # Wait for the job to complete.
+    query_job = client.query(sql, job_config=job_config)
+    
+    try:
+        query_job.result()
+        print("Query success")
+    except Exception as e:
+            print(e)
 
 load_data_from_bigquery_public(public_table_id, target_table_id)
