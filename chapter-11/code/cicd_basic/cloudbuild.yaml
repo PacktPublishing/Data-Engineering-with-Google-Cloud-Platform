@@ -16,7 +16,7 @@ steps:
       './'
     ]
 
-- name: 'gcr.io/$PROJECT_ID/airflow-dags-builder'
+- name: 'gcr.io/$PROJECT_ID/cicd-basic'
   id: Validation Test
   entrypoint: python
   args:
