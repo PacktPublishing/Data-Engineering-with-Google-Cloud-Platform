@@ -1,5 +1,5 @@
-FROM python:3.8.5
+FROM python:3.8-slim-buster
 
 WORKDIR /app
-COPY main.py /app/main.py
+COPY . .
 ENTRYPOINT ["python"]
