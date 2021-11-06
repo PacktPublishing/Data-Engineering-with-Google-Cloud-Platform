@@ -5,45 +5,30 @@ steps:
   args:
   - '-c'
   - |
-   docker pull gcr.io/$PROJECT_ID/airflow-dags-builder:latest || exit 0
+   docker pull gcr.io/$PROJECT_ID/airflow-data-pipeline:latest || exit 0
 - name: gcr.io/cloud-builders/docker
   id: Build Airflow DAGs Builder
   args: [
       'build',
-      '-t', 'gcr.io/$PROJECT_ID/airflow-dags-builder',
-      '--cache-from', 'gcr.io/$PROJECT_ID/airflow-dags-builder:latest',
+      '-t', 'gcr.io/$PROJECT_ID/airflow-data-pipeline',
+      '--cache-from', 'gcr.io/$PROJECT_ID/airflow-data-pipeline:latest',
       './'
     ]
-  dir: ${_DIRECTORY}
-- name: 'gcr.io/$PROJECT_ID/airflow-dags-builder'
+- name: 'gcr.io/$PROJECT_ID/airflow-data-pipeline'
   id: Validation Test
   entrypoint: python
   env:
-  - AIRFLOW__CORE__DAGS_FOLDER=/workspace/${_DIRECTORY}/dags
+  - AIRFLOW__CORE__DAGS_FOLDER=/workspace/dags
   args:
   - -m
   - unittest
-  - tests/dag_integrity_test.py
-  dir: ${_DIRECTORY}
-- name: 'gcr.io/$PROJECT_ID/airflow-dags-builder'
-  id: End to End Test
-  entrypoint: bash
-  env:
-  - AIRFLOW__CORE__DAGS_FOLDER=/workspace/${_DIRECTORY}/dags
-  dir: ${_DIRECTORY}
-  args:
-  - -c
-  - |
-    pwd
-    ls -l
-    airflow initdb
-    airflow variables -s input gs://test-input-bucket/
-    airflow variables -s output gs://test-output-bucket/
-    airflow backfill echo_and_wait --start_date=2020-01-03 --end_date=2020-01-03
-    ret=$?
-    find /workspace/airflow/logs/ -type f -name *.log | sort | xargs cat
-    # Fail if the backfill failed.
-    exit $ret
+  - tests/dag_tests.py
+- name: gcr.io/cloud-builders/docker
+  id: Push Image to GCR
+  args: [
+      'push',
+      'gcr.io/$PROJECT_ID/airflow-data-pipeline:latest'
+    ]
 - name: gcr.io/cloud-builders/gsutil
   id: Deploy DAGs
   args:
@@ -53,7 +38,6 @@ steps:
   - -c
   - -x
   - .*\.pyc|airflow_monitoring.py
-  - /workspace/${_DIRECTORY}/dags/
+  - /workspace/dags
   - ${_DEPLOY_DAGS_LOCATION}
-  dir: ${_DIRECTORY}
-images: ['gcr.io/$PROJECT_ID/airflow-dags-builder:latest']
+images: ['gcr.io/$PROJECT_ID/airflow-data-pipeline:latest']
