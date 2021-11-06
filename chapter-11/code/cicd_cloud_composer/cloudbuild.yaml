@@ -1,11 +1,4 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  id: Pull docker cache
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-   docker pull gcr.io/$PROJECT_ID/airflow-data-pipeline:latest || exit 0
 - name: gcr.io/cloud-builders/docker
   id: Build Airflow DAGs Builder
   args: [
@@ -39,5 +32,4 @@ steps:
   - -x
   - .*\.pyc|airflow_monitoring.py
   - /workspace/dags
-  - ${_DEPLOY_DAGS_LOCATION}
-images: ['gcr.io/$PROJECT_ID/airflow-data-pipeline:latest']
+  - [GCS bucket dags path]
