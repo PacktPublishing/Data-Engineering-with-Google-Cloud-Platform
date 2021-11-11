@@ -27,10 +27,10 @@ def load_gcs_to_bigquery_event_data(gcs_uri, table_id, table_schema):
 bigquery_table_schema = [
     bigquery.SchemaField("trip_id", "STRING"),
     bigquery.SchemaField("duration_sec", "INTEGER"),
-    bigquery.SchemaField("start_date", "STRING"),
+    bigquery.SchemaField("start_date", "TIMESTAMP"),
     bigquery.SchemaField("start_station_name", "STRING"),
     bigquery.SchemaField("start_station_id", "STRING"),
-    bigquery.SchemaField("end_date", "STRING"),
+    bigquery.SchemaField("end_date", "TIMESTAMP"),
     bigquery.SchemaField("end_station_name", "STRING"),
     bigquery.SchemaField("end_station_id", "STRING"),
     bigquery.SchemaField("member_gender", "STRING")
