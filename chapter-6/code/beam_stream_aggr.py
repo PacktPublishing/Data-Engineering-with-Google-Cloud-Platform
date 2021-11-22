@@ -1,24 +1,26 @@
+import argparse
+
 import apache_beam as beam
 from apache_beam.options.pipeline_options import PipelineOptions
-
-from datetime import datetime, time
 
 import json
 import logging
 
-input_topic= 'projects/packt-data-eng-on-gcp/topics/bike-trips'
+input_subscription= 'projects/packt-data-eng-on-gcp/subscriptions/bike-sharing-trips-subs-1'
 output_table = 'packt-data-eng-on-gcp:raw_bikesharing.bike_trips_streaming_sum_aggr'
+
+parser = argparse.ArgumentParser()
+args, beam_args = parser.parse_known_args()
+beam_options = PipelineOptions(beam_args, streaming=True)
 
 class BuildRecordFn(beam.DoFn):
     def process(self, element,  window=beam.DoFn.WindowParam):
         window_start = window.start.to_utc_datetime().isoformat()
         return [element + (window_start,)]
 
-def run(argv=None, save_main_session=True):
-    pipeline_options = PipelineOptions(streaming=True)    
-
-    with beam.Pipeline(options=pipeline_options) as p:(
-        p | "Read from Pub/Sub" >> beam.io.ReadFromPubSub(subscription=None)
+def run():
+    with beam.Pipeline(options=beam_options) as p:(
+        p | "Read from Pub/Sub" >> beam.io.ReadFromPubSub(subscription=input_subscription)
         | 'Decode' >> beam.Map(lambda x: x.decode('utf-8'))
         | "Parse JSON" >> beam.Map(json.loads)
         | "UseFixedWindow" >> beam.WindowInto(beam.window.FixedWindows(60))

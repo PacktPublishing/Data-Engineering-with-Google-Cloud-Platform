@@ -1,3 +1,5 @@
+import argparse
+
 import apache_beam as beam
 from apache_beam.options.pipeline_options import PipelineOptions
 
@@ -7,10 +9,12 @@ import logging
 input_subscription= 'projects/packt-data-eng-on-gcp/subscriptions/bike-sharing-trips-subs-1'
 output_table = 'packt-data-eng-on-gcp:raw_bikesharing.bike_trips_streaming'
 
-def run():
-    pipeline_options = PipelineOptions(streaming=True)    
+parser = argparse.ArgumentParser()
+args, beam_args = parser.parse_known_args()
+beam_options = PipelineOptions(beam_args, streaming=True)
 
-    with beam.Pipeline(options=pipeline_options) as p:(
+def run():
+    with beam.Pipeline(options=beam_options) as p:(
         p | "Read from Pub/Sub" >> beam.io.ReadFromPubSub(subscription=input_subscription)
         | 'Decode' >> beam.Map(lambda x: x.decode('utf-8'))
         | "Parse JSON" >> beam.Map(json.loads)
