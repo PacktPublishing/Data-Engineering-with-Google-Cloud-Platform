@@ -1,14 +1,15 @@
 from google.cloud import bigquery
 
-client = bigquery.Client()
+
 
 # TODO : Change to your project id
-project_id = "packt-data-eng-on-gcp"
-gcs_uri = "gs://{}-data-bucket/from-git/chapter-3/dataset/trips/20180102/*.json".format(project_id)
+PROJECT_ID = "packt-data-eng-on-gcp"
+GCS_URI = "gs://{}-data-bucket/from-git/chapter-3/dataset/trips/20180102/*.json".format(project_id)
+TABLE_ID = "{}.raw_bikesharing.trips".format(PROJECT_ID)
 
-table_id = "{}.raw_bikesharing.trips".format(project_id)
+client = bigquery.Client()
 
-def load_gcs_to_bigquery_event_data(gcs_uri, table_id, table_schema):
+def load_gcs_to_bigquery_event_data(GCS_URI, TABLE_ID, table_schema):
     job_config = bigquery.LoadJobConfig(
         schema=table_schema,
         source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
@@ -16,13 +17,13 @@ def load_gcs_to_bigquery_event_data(gcs_uri, table_id, table_schema):
         )
 
     load_job = client.load_table_from_uri(
-        gcs_uri, table_id, job_config=job_config
+        GCS_URI, TABLE_ID, job_config=job_config
     )
 
     load_job.result()
-    table = client.get_table(table_id)
+    table = client.get_table(TABLE_ID)
 
-    print("Loaded {} rows to table {}".format(table.num_rows, table_id))
+    print("Loaded {} rows to table {}".format(table.num_rows, TABLE_ID))
 
 bigquery_table_schema = [
     bigquery.SchemaField("trip_id", "STRING"),
@@ -35,5 +36,5 @@ bigquery_table_schema = [
     bigquery.SchemaField("end_station_id", "STRING"),
     bigquery.SchemaField("member_gender", "STRING")
 ]
-
-load_gcs_to_bigquery_event_data(gcs_uri, table_id, bigquery_table_schema)
+if __name__ == '__main__':
+    load_gcs_to_bigquery_event_data(GCS_URI, TABLE_ID, bigquery_table_schema)

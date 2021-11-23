@@ -1,24 +1,24 @@
 from google.cloud import bigquery
 
 # TODO : Change to your project id
-project_id = "packt-data-eng-on-gcp"
-public_table_id = "bigquery-public-data.san_francisco_bikeshare.bikeshare_regions"
-target_table_id = "{}.raw_bikesharing.regions".format(project_id)
+PROJECT_ID = "packt-data-eng-on-gcp"
+PUBLIC_TABLE_ID = "bigquery-public-data.san_francisco_bikeshare.bikeshare_regions"
+TARGET_TABLE_ID = "{}.raw_bikesharing.regions".format(PROJECT_ID)
 
-def load_data_from_bigquery_public(public_table_id, target_table_id):
+def load_data_from_bigquery_public(PUBLIC_TABLE_ID, TARGET_TABLE_ID):
     client = bigquery.Client()
     job_config = bigquery.QueryJobConfig(
-    destination = target_table_id,
-    write_disposition ='WRITE_TRUNCATE')
+        destination = TARGET_TABLE_ID,
+        write_disposition ='WRITE_TRUNCATE')
 
-    sql = "SELECT * FROM `{}`;".format(public_table_id)
-
+    sql = "SELECT * FROM `{}`;".format(PUBLIC_TABLE_ID)
     query_job = client.query(sql, job_config=job_config)
-    
+
     try:
         query_job.result()
         print("Query success")
-    except Exception as e:
-            print(e)
+    except Exception as exception:
+        print(exception)
 
-load_data_from_bigquery_public(public_table_id, target_table_id)
+if __name__ == '__main__':
+    load_data_from_bigquery_public(PUBLIC_TABLE_ID, TARGET_TABLE_ID)

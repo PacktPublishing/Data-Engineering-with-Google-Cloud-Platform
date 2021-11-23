@@ -1,11 +1,11 @@
 from google.cloud import bigquery
 
 # TODO : Change to your project id
-project_id = "packt-data-eng-on-gcp"
-table_id = "{}.raw_bikesharing.stations".format(project_id)
-gcs_uri = "gs://{}-data-bucket/mysql_export/stations/20180102/stations.csv".format(project_id)
+PROJECT_ID = "packt-data-eng-on-gcp"
+TABLE_ID = "{}.raw_bikesharing.stations".format(PROJECT_ID)
+GCS_URI = "gs://{}-data-bucket/mysql_export/stations/20180102/stations.csv".format(project_id)
 
-def load_gcs_to_bigquery_snapshot_data(gcs_uri, table_id, table_schema):
+def load_gcs_to_bigquery_snapshot_data(GCS_URI, TABLE_ID, table_schema):
     client = bigquery.Client()
     job_config = bigquery.LoadJobConfig(
         schema = table_schema,
@@ -14,12 +14,12 @@ def load_gcs_to_bigquery_snapshot_data(gcs_uri, table_id, table_schema):
         )
 
     load_job = client.load_table_from_uri(
-        gcs_uri, table_id, job_config=job_config
+        GCS_URI, TABLE_ID, job_config=job_config
     )
     load_job.result()
-    table = client.get_table(table_id)
+    table = client.get_table(TABLE_ID)
 
-    print("Loaded {} rows to table {}".format(table.num_rows, table_id))
+    print("Loaded {} rows to table {}".format(table.num_rows, TABLE_ID))
 
 bigquery_table_schema = [
     bigquery.SchemaField("station_id", "STRING"),
@@ -28,4 +28,5 @@ bigquery_table_schema = [
     bigquery.SchemaField("capacity", "INTEGER")
 ]
 
-load_gcs_to_bigquery_snapshot_data(gcs_uri, table_id, bigquery_table_schema)
+if __name__ == '__main__':
+    load_gcs_to_bigquery_snapshot_data(GCS_URI, TABLE_ID, bigquery_table_schema)
