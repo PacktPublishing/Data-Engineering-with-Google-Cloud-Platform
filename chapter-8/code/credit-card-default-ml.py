@@ -15,7 +15,13 @@ model_name = "cc_default_rf_model.sav"
 
 def load_data_from_bigquery(dataset_table_id):
     client = bigquery.Client()
-    sql = f"""SELECT limit_balance, education_level, age, default_payment_next_month FROM `{dataset_table_id}`"""
+    sql = """SELECT 
+            limit_balance, 
+            education_level, 
+            age, 
+            default_payment_next_month 
+            FROM `{dataset_table_id}`""".format(dataset_table_id=dataset_table_id)
+
     dataframe = (client.query(sql).result().to_dataframe())
 
     print("This is our training table from BigQuery")
@@ -26,20 +32,16 @@ def train_model(dataframe):
     labels = dataframe[target_column]
     features = dataframe.drop(target_column, axis = 1)
 
-    print("Features :")
-    print(features.head(5))
+    print("Features : {}").format(features.head(5))
+    print("Labels : {}").format(labels.head(5))
 
-    print("Labels :")
-    print(labels.head(5))
-
-    X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.3)
+    x_train, x_test, y_train, y_test = train_test_split(features, labels, test_size=0.3)
 
     random_forest_classifier = RandomForestClassifier(n_estimators=100)
-    random_forest_classifier.fit(X_train,y_train)
+    random_forest_classifier.fit(x_train,y_train)
 
-    y_pred=random_forest_classifier.predict(X_test)
-    print("Simulate Prediction :")
-    print(y_pred[:3])
+    y_pred=random_forest_classifier.predict(x_test)
+    print("Simulate Prediction : {}").format(y_pred[:3])
 
     print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
 
@@ -51,12 +53,17 @@ def predict_batch(dataset_table_id):
     loaded_model = joblib.load(model_name)
 
     client = bigquery.Client()
-    sql = f"""SELECT limit_balance, education_level, age FROM `{dataset_table_id}` LIMIT 10;"""
+    sql = """SELECT 
+                limit_balance, 
+                education_level, 
+                age 
+                FROM `{dataset_table_id}` 
+                LIMIT 10;""".format(dataset_table_id=dataset_table_id)
+
     dataframe = (client.query(sql).result().to_dataframe())
 
     prediction=loaded_model.predict(dataframe)
-    print("Batch Prediction :")
-    print(prediction)
+    print("Batch Prediction : {}").format(prediction)
 
 def predict_online(feature_json):
     loaded_model = joblib.load(model_name)

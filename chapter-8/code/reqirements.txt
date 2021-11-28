@@ -1,2 +1,2 @@
-sklearn
-pyarrow
+sklearn==0.17.1
+pyarrow==6.0.1
