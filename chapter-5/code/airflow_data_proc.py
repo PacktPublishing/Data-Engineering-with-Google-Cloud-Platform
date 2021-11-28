@@ -1,13 +1,12 @@
+import os
+
 from airflow import DAG
 from airflow.providers.google.cloud.operators.dataproc import (
     DataprocCreateClusterOperator,
     DataprocDeleteClusterOperator,
     DataprocSubmitJobOperator,
 )
-from datetime import datetime, timedelta
-from random import randint
 from airflow.utils.dates import days_ago
-
 
 PROJECT_ID = os.environ.get('GCP_PROJECT')
 REGION = 'us-central1'

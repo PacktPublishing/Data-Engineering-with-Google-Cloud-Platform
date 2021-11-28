@@ -14,10 +14,10 @@ def create_dim_table(PROJECT_ID, TARGET_TABLE_ID):
           stations.name as station_name,
           regions.name as region_name,
           capacity
-          FROM `{}.raw_bikesharing.stations` stations
-          JOIN `{}.raw_bikesharing.regions` regions
+          FROM `{PROJECT_ID}.raw_bikesharing.stations` stations
+          JOIN `{PROJECT_ID}.raw_bikesharing.regions` regions
           ON stations.region_id = CAST(regions.region_id AS STRING)
-          ;""".format(PROJECT_ID, PROJECT_ID)
+          ;""".format(PROJECT_ID=PROJECT_ID)
 
     query_job = client.query(sql, job_config=job_config)
 
@@ -27,4 +27,5 @@ def create_dim_table(PROJECT_ID, TARGET_TABLE_ID):
     except Exception as exception:
             print(exception)
 
-create_dim_table(PROJECT_ID, TARGET_TABLE_ID)
+if __name__ == '__main__':
+    create_dim_table(PROJECT_ID, TARGET_TABLE_ID)

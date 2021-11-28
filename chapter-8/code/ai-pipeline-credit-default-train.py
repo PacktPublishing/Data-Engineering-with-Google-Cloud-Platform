@@ -25,7 +25,7 @@ def load_data_from_bigquery(bigquery_table_id: str, output_gcs_bucket: str) -> s
     bq_client = bigquery.Client(project=project_id)
     sql = f"""SELECT limit_balance, education_level, age, default_payment_next_month FROM `{bigquery_table_id}`;"""
     dataframe = (bq_client.query(sql).result().to_dataframe())
-    
+
     gcs_client = storage.Client(project=project_id)
     bucket = gcs_client.get_bucket(output_gcs_bucket)
     bucket.blob(output_file).upload_from_string(dataframe.to_csv(index=False), 'text/csv')
@@ -52,11 +52,11 @@ def train_model(gcs_bucket: str, train_file_path: str, target_column: str, n_est
     print("Labels :")
     print(labels.head(5))
 
-    X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.3) 
-    
+    X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.3)
+
     random_forest_classifier = RandomForestClassifier(n_estimators=n_estimators)
     random_forest_classifier.fit(X_train,y_train)
-    
+
     y_pred=random_forest_classifier.predict(X_test)
     print("Simulate Prediction :")
     print(y_pred[:3])
@@ -68,9 +68,8 @@ def train_model(gcs_bucket: str, train_file_path: str, target_column: str, n_est
     bucket = storage.Client().bucket(gcs_bucket)
     blob = bucket.blob(output_file)
     blob.upload_from_filename(model_name)
-    
-    print(f"Model saved in : {output_file}")
 
+    print(f"Model saved in : {output_file}")
 
 @pipeline(
     name=pipeline_name,
@@ -88,6 +87,6 @@ compiler.Compiler().compile(
 api_client = AIPlatformClient(project_id=project_id, region=region)
 
 response = api_client.create_run_from_job_spec(
-    job_spec_path="{pipeline_name}.json", 
+    job_spec_path="{pipeline_name}.json",
     pipeline_root=pipeline_root_path
 )

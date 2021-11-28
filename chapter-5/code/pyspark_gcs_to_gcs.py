@@ -4,11 +4,11 @@ spark = SparkSession.builder \
 .appName('spark_hdfs_to_hdfs') \
 .getOrCreate()
 
-
 sc = spark.sparkContext
 sc.setLogLevel("WARN")
 
 BUCKET_NAME="packt-data-eng-on-gcp-data-bucket"
+MASTER_NODE_INSTANCE_NAME="packt-dataproc-cluster-m"
 log_files_rdd = sc.textFile('gs://{}/from-git/chapter-5/dataset/logs_example/*'.format(BUCKET_NAME))
 
 splitted_rdd = log_files_rdd.map(lambda x: x.split(" "))
@@ -18,7 +18,7 @@ columns = ["ip","date","method","url"]
 logs_df = selected_col_rdd.toDF(columns)
 logs_df.createOrReplaceTempView('logs_df')
 
-sql = f"""
+sql = """
   SELECT
   url,
   count(*) as count

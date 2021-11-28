@@ -20,7 +20,7 @@ class TestDags(unittest.TestCase):
             print(dag)
 
         self.assertEqual(
-                len(self.dagbag.import_errors), 0, 
+                len(self.dagbag.import_errors), 0,
                 "DAG Errors: {}".format(self.dagbag.import_errors)
             )
 

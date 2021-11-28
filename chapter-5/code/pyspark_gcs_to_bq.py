@@ -4,7 +4,6 @@ spark = SparkSession.builder \
 .appName('spark_hdfs_to_hdfs') \
 .getOrCreate()
 
-
 sc = spark.sparkContext
 sc.setLogLevel("WARN")
 
@@ -18,7 +17,7 @@ columns = ["ip","date","method","url"]
 logs_df = selected_col_rdd.toDF(columns)
 logs_df.createOrReplaceTempView('logs_df')
 
-sql = f"""
+sql = """
   SELECT
   url,
   count(*) as count

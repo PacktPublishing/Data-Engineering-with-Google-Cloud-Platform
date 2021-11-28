@@ -6,5 +6,5 @@ if __name__ == "__main__":
     VALUE_1 = 10
     VALUE_2 = 20
 
-    result_value = sum_two_values(VALUE_1, VALUE_2)
-    print(result_value)
+    RESULT_VALUE = sum_two_values(VALUE_1, VALUE_2)
+    print(RESULT_VALUE)

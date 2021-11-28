@@ -25,7 +25,7 @@ def load_data_from_bigquery(bigquery_table_id: str, output_gcs_bucket: str) -> s
     bq_client = bigquery.Client(project=project_id)
     sql = f"""SELECT limit_balance, education_level, age FROM `{bigquery_table_id}` LIMIT 10;"""
     dataframe = (bq_client.query(sql).result().to_dataframe())
-    
+
     gcs_client = storage.Client(project=project_id)
     bucket = gcs_client.get_bucket(output_gcs_bucket)
     bucket.blob(output_file).upload_from_string(dataframe.to_csv(index=False), 'text/csv')
@@ -45,7 +45,7 @@ def predict_batch(gcs_bucket: str, predict_file_path: str, model_path: str, outp
 
     # Load predict data from GCS to pandas
     dataframe = pd.read_csv(f'gs://{gcs_bucket}/{predict_file_path}')
-    
+
     # Load ML model from GCS
     model_file = bucket.blob(model_path)
     model_file.download_to_filename(model_local_uri)
@@ -59,7 +59,6 @@ def predict_batch(gcs_bucket: str, predict_file_path: str, model_path: str, outp
     bucket.blob(output_path).upload_from_string(prediction.to_csv(index=False), 'text/csv')
 
     print(f"Prediction file path: {output_path}")
-    
 
 @pipeline(
     name="ai-pipeline-credit-default-predict",
@@ -68,8 +67,8 @@ def predict_batch(gcs_bucket: str, predict_file_path: str, model_path: str, outp
 )
 def pipeline():
     load_data_from_bigquery_task = load_data_from_bigquery(bigquery_table_id, gcs_bucket)
-    predict_batch(gcs_bucket, 
-    load_data_from_bigquery_task.output, 
+    predict_batch(gcs_bucket,
+    load_data_from_bigquery_task.output,
     "ai-pipeline-credit-default-train/artefacts/cc_default_rf_model.joblib",
     "ai-pipeline-credit-default-predict/artefacts/prediction.csv" )
 
@@ -80,7 +79,6 @@ compiler.Compiler().compile(
 api_client = AIPlatformClient(project_id=project_id, region=region)
 
 response = api_client.create_run_from_job_spec(
-    job_spec_path="{pipeline_name}.json", 
+    job_spec_path="{pipeline_name}.json",
     pipeline_root=pipeline_root_path
 )
-

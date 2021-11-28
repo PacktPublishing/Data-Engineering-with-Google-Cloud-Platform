@@ -1,26 +1,27 @@
 from google.cloud import bigquery
 
 # TODO : Change to your project id
-project_id = "packt-data-eng-on-gcp"
-target_table_id = "{}.dwh_bikesharing.dim_regions".format(project_id)
+PROJECT_ID = "packt-data-eng-on-gcp"
+TARGET_TABLE_ID = "{}.dwh_bikesharing.dim_regions".format(PROJECT_ID)
 
-def create_dim_table(project_id, target_table_id):
+def create_dim_table(PROJECT_ID, TARGET_TABLE_ID):
     client = bigquery.Client()
     job_config = bigquery.QueryJobConfig(
-    destination=target_table_id,
+    destination=TARGET_TABLE_ID,
     write_disposition='WRITE_TRUNCATE')
 
-    table = bigquery.Table(target_table_id)
     sql = """SELECT CAST(region_id AS STRING) as region_id, name
           FROM `{}.raw_bikesharing.regions` regions
-          ;""".format(project_id)
+          ;""".format(PROJECT_ID)
 
     query_job = client.query(sql, job_config=job_config)
 
     try:
         query_job.result()
         print("Query success")
-    except Exception as e:
-            print(e)
+    except Exception as exception:
+        print(exception)
 
-create_dim_table(project_id, target_table_id)
+if __name__ == '__main__':
+    create_dim_table(PROJECT_ID, TARGET_TABLE_ID)
+

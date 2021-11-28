@@ -2,11 +2,11 @@ import sys
 from google.cloud import bigquery
 
 # TODO : Change to your project id
-project_id = "packt-data-eng-on-gcp"
-target_table_id = "{}.dwh_bikesharing.fact_region_gender_daily".format(project_id)
+PROJECT_ID = "packt-data-eng-on-gcp"
+target_table_id = "{PROJECT_ID}.dwh_bikesharing.fact_region_gender_daily".format(PROJECT_ID)
 
 
-def create_fact_table(project_id, target_table_id):
+def create_fact_table(PROJECT_ID, target_table_id):
     load_date = sys.argv[1] # date format : yyyy-mm-dd
     print("\nLoad date:", load_date)
 
@@ -19,19 +19,21 @@ def create_fact_table(project_id, target_table_id):
                 region_id,
                 member_gender,
                 COUNT(trip_id) as total_trips
-                FROM `raw_bikesharing.trips` trips
-                JOIN `raw_bikesharing.stations` stations
+                FROM `{PROJECT_ID}.raw_bikesharing.trips` trips
+                JOIN `{PROJECT_ID}.raw_bikesharing.stations` stations
                 ON trips.start_station_id = stations.station_id
                 WHERE DATE(start_date) = DATE('{load_date}') AND member_gender IS NOT NULL
                 GROUP BY trip_date, region_id, member_gender
-                ;""".format(load_date)
+                ;""".format(PROJECT_ID=PROJECT_ID, load_date=load_date)
 
     query_job = client.query(sql, job_config=job_config)
 
     try:
         query_job.result()
         print("Query success")
-    except Exception as e:
-            print(e)
+    except Exception as exception:
+        print(exception)
 
-create_fact_table(project_id, target_table_id)
+if __name__ == '__main__':
+    create_fact_table(PROJECT_ID, target_table_id)
+

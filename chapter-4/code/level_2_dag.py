@@ -1,11 +1,8 @@
-from datetime import timedelta
-
 from airflow import DAG
 from airflow.contrib.operators.gcp_sql_operator import CloudSqlInstanceExportOperator
 from airflow.contrib.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
 from airflow.contrib.operators.bigquery_operator import BigQueryOperator
 from airflow.utils.dates import days_ago
-import os
 
 args = {
     'owner': 'packt-developer',
@@ -34,7 +31,10 @@ with DAG(
 ) as dag:
 
     sql_export_task = CloudSqlInstanceExportOperator(
-        project_id=GCP_PROJECT_ID, body=export_body, instance=INSTANCE_NAME, task_id='sql_export_task'
+        project_id=GCP_PROJECT_ID, 
+        body=export_body, 
+        instance=INSTANCE_NAME, 
+        task_id='sql_export_task'
     )
 
     gcs_to_bq_example = GoogleCloudStorageToBigQueryOperator(

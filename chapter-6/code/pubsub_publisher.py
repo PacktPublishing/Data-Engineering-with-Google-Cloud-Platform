@@ -1,15 +1,16 @@
-from concurrent import futures
-from google.cloud import pubsub_v1
-from random import randint
-from datetime import datetime
 import json
 
+from concurrent import futures
+from datetime import datetime
+from google.cloud import pubsub_v1
+from random import randint
+
 # TODO(developer)
-project_id = "packt-data-eng-on-gcp"
-topic_id = "bike-sharing-trips"
+PROJECT_ID = "packt-data-eng-on-gcp"
+TOPIC_ID = "bike-sharing-trips"
 
 publisher = pubsub_v1.PublisherClient()
-topic_path = publisher.topic_path(project_id, topic_id)
+topic_path = publisher.topic_path(PROJECT_ID, TOPIC_ID)
 publish_futures = []
 
 def get_callback(publish_future, data):
@@ -21,7 +22,6 @@ def get_callback(publish_future, data):
             print(f"Publishing {data} timed out.")
 
     return callback
-
 
 def create_random_message():
     trip_id = randint(10000,99999)
@@ -38,15 +38,15 @@ def create_random_message():
             }
     return message_json
 
+if __name__ == '__main__':
+    for i in range(10):
+        message_json = create_random_message()
+        data = json.dumps(message_json)
+        publish_future = publisher.publish(topic_path, data.encode("utf-8"))
+        publish_future.add_done_callback(get_callback(publish_future, data))
+        publish_futures.append(publish_future)
 
-for i in range(10):
-    message_json = create_random_message()
-    data = json.dumps(message_json)
-    publish_future = publisher.publish(topic_path, data.encode("utf-8"))
-    publish_future.add_done_callback(get_callback(publish_future, data))
-    publish_futures.append(publish_future)
+    # Wait for all the publish futures to resolve before exiting.
+    futures.wait(publish_futures, return_when=futures.ALL_COMPLETED)
 
-# Wait for all the publish futures to resolve before exiting.
-futures.wait(publish_futures, return_when=futures.ALL_COMPLETED)
-
-print(f"Published messages with error handler to {topic_path}.")
+    print(f"Published messages with error handler to {topic_path}.")

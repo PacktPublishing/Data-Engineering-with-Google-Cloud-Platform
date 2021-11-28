@@ -1,25 +1,23 @@
-from datetime import datetime, timedelta
+import json
+import os
 
 from airflow import DAG
 from airflow.contrib.operators.gcp_sql_operator import CloudSqlInstanceExportOperator
 from airflow.contrib.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
 from airflow.contrib.operators.gcs_to_gcs import GoogleCloudStorageToGoogleCloudStorageOperator
-from airflow.contrib.sensors.gcs_sensor import GoogleCloudStorageObjectSensor
 from airflow.contrib.operators.bigquery_check_operator import BigQueryCheckOperator
 from airflow.contrib.operators.bigquery_to_gcs import BigQueryToCloudStorageOperator
 from airflow.contrib.operators.bigquery_operator import BigQueryOperator
-from airflow.utils.dates import days_ago
 from airflow.models import Variable
-import os
-import json
+from datetime import datetime
 
 args = {
     'owner': 'packt-developer',
 }
 
 def read_json_schema(gcs_file_path):
-    with open(gcs_file_path, "r") as f:
-        schema_json = json.load(f)
+    with open(gcs_file_path, "r") as file:
+        schema_json = json.load(file)
 
     return schema_json
 

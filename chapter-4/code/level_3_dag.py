@@ -1,4 +1,5 @@
-from datetime import datetime, timedelta
+import os
+import json
 
 from airflow import DAG
 from airflow.contrib.operators.gcp_sql_operator import CloudSqlInstanceExportOperator
@@ -7,18 +8,16 @@ from airflow.contrib.operators.gcs_to_gcs import GoogleCloudStorageToGoogleCloud
 from airflow.contrib.operators.bigquery_check_operator import BigQueryCheckOperator
 from airflow.contrib.operators.bigquery_to_gcs import BigQueryToCloudStorageOperator
 from airflow.contrib.operators.bigquery_operator import BigQueryOperator
-from airflow.utils.dates import days_ago
 from airflow.models import Variable
-import os
-import json
+from datetime import datetime
 
 args = {
     'owner': 'packt-developer',
 }
 
 def read_json_schema(gcs_file_path):
-    with open(gcs_file_path, "r") as f:
-        schema_json = json.load(f)
+    with open(gcs_file_path, "r") as file:
+        schema_json = json.load(file)
 
     return schema_json
 
@@ -52,14 +51,14 @@ export_body = {
 }
 
 bq_stations_table_name = "stations"
-bq_stations_table_id    = f"{gcp_project_id}.{bq_raw_dataset}.{bq_stations_table_name}"
+bq_stations_table_id = f"{gcp_project_id}.{bq_raw_dataset}.{bq_stations_table_name}"
 bq_stations_table_schema = read_json_schema("/home/airflow/gcs/data/schema/stations_schema.json")
 
 # Regions
 gcs_regions_source_object = "from-git/chapter-3/dataset/regions/regions.csv"
 gcs_regions_target_object = "chapter-4/regions/regions.csv"
-bq_regions_table_name     = "regions"
-bq_regions_table_id      = f"{gcp_project_id}.{bq_raw_dataset}.{bq_regions_table_name}"
+bq_regions_table_name = "regions"
+bq_regions_table_id = f"{gcp_project_id}.{bq_raw_dataset}.{bq_regions_table_name}"
 bq_regions_table_schema = read_json_schema("/home/airflow/gcs/data/schema/regions_schema.json")
 
 # Trips
@@ -68,18 +67,18 @@ bq_temporary_extract_table_name = "trips"
 bq_temporary_table_id = f"{gcp_project_id}.{bq_temporary_extract_dataset_name}.{bq_temporary_extract_table_name}"
 
 gcs_trips_source_object = "chapter-4/trips/trips.csv"
-gcs_trips_source_uri=f"gs://{gcs_source_data_bucket}/{gcs_trips_source_object}"
+gcs_trips_source_uri = f"gs://{gcs_source_data_bucket}/{gcs_trips_source_object}"
 
 bq_trips_table_name = "trips"
-bq_trips_table_id      = f"{gcp_project_id}.{bq_raw_dataset}.{bq_trips_table_name}"
+bq_trips_table_id = f"{gcp_project_id}.{bq_raw_dataset}.{bq_trips_table_name}"
 bq_trips_table_schema = read_json_schema("/home/airflow/gcs/data/schema/trips_schema.json")
 
 # DWH
 bq_fact_trips_daily_table_name = "facts_trips_daily"
-bq_fact_trips_daily_table_id      = f"{gcp_project_id}.{bq_dwh_dataset}.{bq_fact_trips_daily_table_name}"
+bq_fact_trips_daily_table_id = f"{gcp_project_id}.{bq_dwh_dataset}.{bq_fact_trips_daily_table_name}"
 
 bq_dim_stations_table_name = "dim_stations"
-bq_dim_stations_table_id      = f"{gcp_project_id}.{bq_dwh_dataset}.{bq_dim_stations_table_name}"
+bq_dim_stations_table_id = f"{gcp_project_id}.{bq_dwh_dataset}.{bq_dim_stations_table_name}"
 
 with DAG(
     dag_id='level_3_dag_parameters',

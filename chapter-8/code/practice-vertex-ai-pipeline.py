@@ -10,7 +10,6 @@ region = "us-central1"
 pipeline_name = "practice-vertex-ai-pipeline"
 pipeline_root_path = f"gs://{gcs_bucket}/{pipeline_name}"
 
-
 @component(output_component_file="step_one.yml")
 def step_one(text: str) -> str:
     print(text)
@@ -34,7 +33,7 @@ def step_four(text1: str, text2: str, gcs_bucket: str):
     
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(gcs_bucket)
-    blob = bucket.blob(f"practice-vertex-ai-pipeline/artefact/output.txt")
+    blob = bucket.blob("practice-vertex-ai-pipeline/artefact/output.txt")
     blob.upload_from_string(output_string)
 
     print(output_string)
@@ -50,7 +49,6 @@ def pipeline(text: str = "Hello"):
     step_two_task = step_two(step_one_task.output)
     step_three_task = step_three(step_one_task.output)
     step_four_task = step_four(step_two_task.output, step_three_task.output, gcs_bucket)
-
 
 compiler.Compiler().compile(
     pipeline_func=pipeline, package_path=f"{pipeline_name}.json"

@@ -27,4 +27,3 @@ def detect_text(gcs_uri : str):
 vision_client = vision.ImageAnnotatorClient()
 translate_client = translate.Client()
 detect_text(gcs_uri)
-
