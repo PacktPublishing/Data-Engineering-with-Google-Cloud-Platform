@@ -3,13 +3,13 @@ from google.cloud import translate_v2 as translate
 
 # TODO: Change to your gcs bucket
 GCS_BUCKET = "packt-data-eng-on-gcp-data-bucket"
-gcs_uri = "gs://{}/chapter-8/chapter-8-example-text.jpg".format(GCS_BUCKET)
+GCS_URI = "gs://{}/chapter-8/chapter-8-example-text.jpg".format(GCS_BUCKET)
 
-def detect_text(gcs_uri : str):
-    print("Looking for text from image in GCS: {}".format(gcs_uri))
+def detect_text(GCS_URI : str):
+    print("Looking for text from image in GCS: {}".format(GCS_URI))
 
     image = vision.Image(
-        source=vision.ImageSource(gcs_image_uri=gcs_uri)
+        source=vision.ImageSource(gcs_image_uri=GCS_URI)
     )
 
     text_detection_response = vision_client.text_detection(image=image)
@@ -26,4 +26,4 @@ def detect_text(gcs_uri : str):
 
 vision_client = vision.ImageAnnotatorClient()
 translate_client = translate.Client()
-detect_text(gcs_uri)
+detect_text(GCS_URI)
