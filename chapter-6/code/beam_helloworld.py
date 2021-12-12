@@ -6,7 +6,7 @@ from apache_beam.transforms.combiners import Sample
 from apache_beam.options.pipeline_options import PipelineOptions
 
 
-INPUT_FILE = 'gs://packt-data-eng-on-gcp-data-bucket/from-git/chapter-5/dataset/logs_example.txt'
+INPUT_FILE = 'gs://packt-data-eng-on-gcp-data-bucket/from-git/chapter-6/dataset/logs_example.txt'
 OUTPUT_PATH = 'gs://packt-data-eng-on-gcp-data-bucket/chapter-6/dataflow/output/output_file_'
 
 parser = argparse.ArgumentParser()
