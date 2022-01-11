@@ -1,0 +1,25 @@
+steps:
+- name: gcr.io/cloud-builders/docker
+  id: Build Image
+  args: [
+      'build',
+      '-t', 'gcr.io/$PROJECT_ID/cicd-basic',
+      '.'
+    ]
+
+- name: 'gcr.io/$PROJECT_ID/cicd-basic'
+  id: Validation Test
+  entrypoint: python
+  args: [
+    '-m',
+    'unittest',
+    'tests/test_calculate.py'
+  ]
+  
+- name: gcr.io/cloud-builders/docker
+  id: Push Image to GCR
+  args: [
+      'push',
+      'gcr.io/$PROJECT_ID/cicd-basic:latest'
+    ]
+  

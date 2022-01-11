@@ -1,0 +1,22 @@
+[
+    {
+       "name":"station_id",
+       "type":"STRING",
+       "mode":"NULLABLE"
+    },
+    {
+       "name":"name",
+       "type":"STRING",
+       "mode":"NULLABLE"
+    },
+    {
+       "name":"region_id",
+       "type":"STRING",
+       "mode":"NULLABLE"
+    },
+    {
+       "name":"capacity",
+       "type":"INTEGER",
+       "mode":"NULLABLE"
+    }
+ ]
