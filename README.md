@@ -62,7 +62,7 @@ We also provide a PDF file that has color images of the screenshots/diagrams use
 
 * Data Engineering with AWS [[Packt]](https://www.packtpub.com/product/data-engineering-with-aws/9781800560413?utm_source=github&utm_medium=repository&utm_campaign=9781800560413) [[Amazon]](https://www.amazon.com/dp/B09C2MN5DV)
 
-## Get to Know the Authors
+## Get to Know the Author
 **Adi Wijaya**
 is a strategic cloud data engineer at Google. He holds a bachelor's degree
 in computer science from Binus University and co-founded DataLabs in Indonesia.
