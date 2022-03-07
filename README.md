@@ -1,6 +1,6 @@
 # Data Engineering with Google Cloud Platform
 
-<a href="https://www.packtpub.com/product/data-engineering-with-google-cloud-platform/9781800561328?utm_source=github&utm_medium=repository&utm_campaign=9781800561328"><img src="https://www.packtpub.com/product/data-engineering-with-google-cloud-platform/9781800561328" alt="Data Engineering with Google Cloud Platform" height="256px" align="right"></a>
+<a href="https://www.packtpub.com/product/data-engineering-with-google-cloud-platform/9781800561328?utm_source=github&utm_medium=repository&utm_campaign=9781800561328"><img src="https://static.packt-cdn.com/products/9781800561328/cover/smaller" alt="Data Engineering with Google Cloud Platform" height="256px" align="right"></a>
 
 This is the code repository for [Data Engineering with Google Cloud Platform](https://www.packtpub.com/product/data-engineering-with-google-cloud-platform/9781800561328?utm_source=github&utm_medium=repository&utm_campaign=9781800561328), published by Packt.
 
