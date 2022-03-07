@@ -7,8 +7,7 @@ This is the code repository for [Data Engineering with Google Cloud Platform](ht
 **A practical guide to operationalizing scalable data analytics systems on GCP**
 
 ## What is this book about?
-The DP-203: Azure Data Engineer Associate Certification Guide offers complete coverage of the DP-203 certification requirements so that you can take the exam with confidence. Going beyond the requirements for the exam, 
-this book also provides you with additional knowledge to enable you to succeed in your real-life Azure data engineering projects.
+With this book, you'll understand how the highly scalable Google Cloud Platform (GCP) enables data engineers to create end-to-end data pipelines right from storing and processing data and workflow orchestration to presenting data through visualization dashboards.
 
 
 This book covers the following exciting features: 
