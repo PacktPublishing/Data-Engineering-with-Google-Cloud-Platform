@@ -1,3 +1,7 @@
+## [Get this title for $10 on Packt's Spring Sale](https://www.packt.com/B16851?utm_source=github&utm_medium=packt-github-repo&utm_campaign=spring_10_dollar_2022)
+-----
+For a limited period, all eBooks and Videos are only $10. All the practical content you need \- by developers, for developers
+
 # Data Engineering with Google Cloud Platform
 
 <a href="https://www.packtpub.com/product/data-engineering-with-google-cloud-platform/9781800561328?utm_source=github&utm_medium=repository&utm_campaign=9781800561328"><img src="https://static.packt-cdn.com/products/9781800561328/cover/smaller" alt="Data Engineering with Google Cloud Platform" height="256px" align="right"></a>
