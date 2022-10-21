@@ -67,3 +67,7 @@ is a strategic cloud data engineer at Google. He holds a bachelor's degree
 in computer science from Binus University and co-founded DataLabs in Indonesia.
 Currently, he dedicates himself to big data and analytics and has spent a good chunk
 of his career helping global companies in different industries.
+### Download a free PDF
+
+ <i>If you have already purchased a print or Kindle version of this book, you can get a DRM-free PDF version at no cost.<br>Simply click on the link to claim your free PDF.</i>
+<p align="center"> <a href="https://packt.link/free-ebook/9781800561328">https://packt.link/free-ebook/9781800561328 </a> </p>
