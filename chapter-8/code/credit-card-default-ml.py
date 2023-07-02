@@ -32,8 +32,8 @@ def train_model(dataframe):
     labels = dataframe[target_column]
     features = dataframe.drop(target_column, axis = 1)
 
-    print("Features : {}").format(features.head(5))
-    print("Labels : {}").format(labels.head(5))
+    print("Features : {}".format(features.head(5)))
+    print("Labels : {}".format(labels.head(5)))
 
     x_train, x_test, y_train, y_test = train_test_split(features, labels, test_size=0.3)
 
@@ -41,7 +41,7 @@ def train_model(dataframe):
     random_forest_classifier.fit(x_train,y_train)
 
     y_pred=random_forest_classifier.predict(x_test)
-    print("Simulate Prediction : {}").format(y_pred[:3])
+    print("Simulate Prediction : {}".format(y_pred[:3]))
 
     print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
 
@@ -63,7 +63,7 @@ def predict_batch(dataset_table_id):
     dataframe = (client.query(sql).result().to_dataframe())
 
     prediction=loaded_model.predict(dataframe)
-    print("Batch Prediction : {}").format(prediction)
+    print("Batch Prediction : {}".format(prediction))
 
 def predict_online(feature_json):
     loaded_model = joblib.load(model_name)
