@@ -4,7 +4,7 @@ from google.cloud import bigquery
 
 # TODO : Change to your project id
 PROJECT_ID = "packt-data-eng-on-gcp"
-GCS_URI = "gs://{}-data-bucket/from-git/chapter-3/dataset/trips/20180102/*.json".format(project_id)
+GCS_URI = "gs://{}-data-bucket/from-git/chapter-3/dataset/trips/20180102/*.json".format(PROJECT_ID)
 TABLE_ID = "{}.raw_bikesharing.trips".format(PROJECT_ID)
 
 client = bigquery.Client()
